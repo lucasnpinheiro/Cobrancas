@@ -1,0 +1,62 @@
+msgid "Add"
+msgstr "Novo"
+
+msgid "View"
+msgstr "Detalhes"
+
+msgid "List"
+msgstr "Consultar"
+
+msgid "Edit"
+msgstr "Editar"
+
+msgid "Delete"
+msgstr "Excluir"
+
+msgid "Status"
+msgstr "Situação"
+
+msgid "Updated"
+msgstr "Alteração"
+
+msgid "Modified"
+msgstr "Modificação"
+
+msgid "Created"
+msgstr "Criação"
+
+msgid "updated"
+msgstr "Alteração"
+
+msgid "modified"
+msgstr "Modificação"
+
+msgid "created"
+msgstr "Criação"
+
+msgid "Actions"
+msgstr "Ações"
+
+msgid "previous"
+msgstr "Anterior"
+
+msgid "next"
+msgstr "Proximo"
+
+msgid "Submit"
+msgstr "Salvar"
+
+msgid "Descricao"
+msgstr "Descrição"
+
+msgid "Valor"
+msgstr "Valor R$"
+
+msgid "of"
+msgstr "de"
+
+msgid "in total"
+msgstr "no total"
+
+msgid "avaliacao"
+msgstr "avaliação"

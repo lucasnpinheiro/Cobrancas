@@ -1,0 +1,21 @@
+2015-07-18 04:06:34 Error: [PDOException] SQLSTATE[HY000] [1045] Access denied for user 'my_app'@'localhost' (using password: YES)
+Stack Trace:
+#0 /home/lucas/NetBeansProjects/agencia_voxel/Cobrancas/vendor/cakephp/cakephp/src/Database/Driver/PDODriverTrait.php(48): PDO->__construct('mysql:host=loca...', 'my_app', 'secret', Array)
+#1 /home/lucas/NetBeansProjects/agencia_voxel/Cobrancas/vendor/cakephp/cakephp/src/Database/Driver/Mysql.php(89): Cake\Database\Driver\Mysql->_connect('mysql:host=loca...', Array)
+#2 /home/lucas/NetBeansProjects/agencia_voxel/Cobrancas/vendor/cakephp/cakephp/src/Database/Schema/BaseSchema.php(46): Cake\Database\Driver\Mysql->connect()
+#3 /home/lucas/NetBeansProjects/agencia_voxel/Cobrancas/vendor/cakephp/cakephp/src/Database/Dialect/MysqlDialectTrait.php(62): Cake\Database\Schema\BaseSchema->__construct(Object(Cake\Database\Driver\Mysql))
+#4 /home/lucas/NetBeansProjects/agencia_voxel/Cobrancas/vendor/cakephp/cakephp/src/Database/Schema/Collection.php(52): Cake\Database\Driver\Mysql->schemaDialect()
+#5 /home/lucas/NetBeansProjects/agencia_voxel/Cobrancas/vendor/cakephp/cakephp/src/Database/Schema/CachedCollection.php(44): Cake\Database\Schema\Collection->__construct(Object(Cake\Database\Connection))
+#6 /home/lucas/NetBeansProjects/agencia_voxel/Cobrancas/vendor/cakephp/cakephp/src/Database/Connection.php(319): Cake\Database\Schema\CachedCollection->__construct(Object(Cake\Database\Connection), true)
+#7 /home/lucas/NetBeansProjects/agencia_voxel/Cobrancas/vendor/cakephp/bake/src/Shell/Task/ModelTask.php(819): Cake\Database\Connection->schemaCollection()
+#8 /home/lucas/NetBeansProjects/agencia_voxel/Cobrancas/vendor/cakephp/bake/src/Shell/Task/ModelTask.php(795): Bake\Shell\Task\ModelTask->_getAllTables()
+#9 /home/lucas/NetBeansProjects/agencia_voxel/Cobrancas/vendor/cakephp/bake/src/Shell/BakeShell.php(228): Bake\Shell\Task\ModelTask->listAll()
+#10 [internal function]: Bake\Shell\BakeShell->all()
+#11 /home/lucas/NetBeansProjects/agencia_voxel/Cobrancas/vendor/cakephp/cakephp/src/Console/Shell.php(380): call_user_func_array(Array, Array)
+#12 /home/lucas/NetBeansProjects/agencia_voxel/Cobrancas/vendor/cakephp/cakephp/src/Console/ShellDispatcher.php(204): Cake\Console\Shell->runCommand(Array, true)
+#13 /home/lucas/NetBeansProjects/agencia_voxel/Cobrancas/vendor/cakephp/cakephp/src/Console/ShellDispatcher.php(175): Cake\Console\ShellDispatcher->_dispatch()
+#14 /home/lucas/NetBeansProjects/agencia_voxel/Cobrancas/vendor/cakephp/cakephp/src/Console/ShellDispatcher.php(126): Cake\Console\ShellDispatcher->dispatch()
+#15 /home/lucas/NetBeansProjects/agencia_voxel/Cobrancas/bin/cake.php(33): Cake\Console\ShellDispatcher::run(Array)
+#16 {main}
+
+
