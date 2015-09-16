@@ -14,5 +14,4 @@ return array(
     $vendorDir . '/nikic/php-parser/lib/bootstrap.php',
     $vendorDir . '/symfony/var-dumper/Resources/functions/dump.php',
     $vendorDir . '/psy/psysh/src/Psy/functions.php',
-    $vendorDir . '/os/php-excel/PHPExcel/PHPExcel.php',
 );

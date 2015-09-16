@@ -96,15 +96,22 @@ class Migrations
      * - `connection` The datasource connection to use
      * - `source` The folder where migrations are in
      * - `plugin` The plugin containing the migrations
+     * - `date` The date to migrate to
      *
      * @return bool Success
      */
     public function migrate($options = [])
     {
         $input = $this->getInput('Migrate', [], $options);
+        $method = 'migrate';
         $params = ['default', $input->getOption('target')];
 
-        $this->run('migrate', $params, $input);
+        if ($input->getOption('date')) {
+            $method = 'migrateToDateTime';
+            $params[1] = new \DateTime($input->getOption('date'));
+        }
+
+        $this->run($method, $params, $input);
         return true;
     }
 
@@ -119,15 +126,22 @@ class Migrations
      * - `connection` The datasource connection to use
      * - `source` The folder where migrations are in
      * - `plugin` The plugin containing the migrations
+     * - `date` The date to rollback to
      *
      * @return bool Success
      */
     public function rollback($options = [])
     {
         $input = $this->getInput('Rollback', [], $options);
+        $method = 'rollback';
         $params = ['default', $input->getOption('target')];
 
-        $this->run('rollback', $params, $input);
+        if ($input->getOption('date')) {
+            $method = 'rollbackToDateTime';
+            $params[1] = new \DateTime($input->getOption('date'));
+        }
+
+        $this->run($method, $params, $input);
         return true;
     }
 

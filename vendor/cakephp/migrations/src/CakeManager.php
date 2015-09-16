@@ -72,6 +72,66 @@ class CakeManager extends Manager
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function migrateToDateTime($environment, \DateTime $dateTime)
+    {
+        $versions = array_keys($this->getMigrations());
+        $dateString = $dateTime->format('Ymdhis');
+        $versionToMigrate = null;
+        foreach ($versions as $version) {
+            if ($dateString > $version) {
+                $versionToMigrate = $version;
+            }
+        }
+
+        if ($versionToMigrate === null) {
+            $this->getOutput()->writeln(
+                'No migrations to run'
+            );
+            return;
+        }
+
+        $this->getOutput()->writeln(
+            'Migrating to version ' . $versionToMigrate
+        );
+        return $this->migrate($environment, $versionToMigrate);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function rollbackToDateTime($environment, \DateTime $dateTime)
+    {
+        $env = $this->getEnvironment($environment);
+        $versions = $env->getVersions();
+        $dateString = $dateTime->format('Ymdhis');
+        sort($versions);
+        $versions = array_reverse($versions);
+
+        if ($dateString > $versions[0]) {
+            $this->getOutput()->writeln('No migrations to rollback');
+            return;
+        }
+
+        if ($dateString < end($versions)) {
+            $this->getOutput()->writeln('Rolling back all migrations');
+            return $this->rollback($environment, 0);
+        }
+
+        foreach ($versions as $index => $version) {
+            if ($dateString > $version) {
+                break;
+            }
+        }
+
+        $versionToRollback = $versions[$index];
+
+        $this->getOutput()->writeln('Rolling back to version ' . $versionToRollback);
+        return $this->rollback($environment, $versionToRollback);
+    }
+
+    /**
      * Checks if the migration with version number $version as already been mark migrated
      *
      * @param int|string $version Version number of the migration to check

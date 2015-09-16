@@ -11,12 +11,10 @@
  */
 namespace Migrations\View\Helper;
 
-use Cake\Database\Schema\Collection;
 use Cake\Utility\Hash;
 use Cake\Utility\Inflector;
 use Cake\View\Helper;
 use Cake\View\View;
-use InvalidArgumentException;
 
 /**
  * Migration Helper class for output of field data in migration files.
@@ -103,7 +101,7 @@ class MigrationHelper extends Helper
      * Returns the Cake\Database\Schema\Table for $table
      *
      * @param string $table Name of the table to get the Schema for
-     * @return Cake\Database\Schema\Table
+     * @return \Cake\Database\Schema\Table
      */
     protected function schema($table)
     {
@@ -286,7 +284,8 @@ class MigrationHelper extends Helper
             'precision', 'scale',
             'after', 'update',
             'comment', 'unsigned',
-            'signed', 'properties'
+            'signed', 'properties',
+            'autoIncrement'
         ];
 
         $attributes = [];
