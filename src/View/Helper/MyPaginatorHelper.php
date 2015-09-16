@@ -14,7 +14,7 @@
 namespace App\View\Helper;
 
 use Cake\Utility\Inflector;
-use Bootstrap3\View\Helper\BootstrapPaginatorHelper;
+use Bootstrap\View\Helper\BootstrapPaginatorHelper;
 
 class MyPaginatorHelper extends BootstrapPaginatorHelper {
 

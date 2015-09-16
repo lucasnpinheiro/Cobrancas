@@ -5,6 +5,7 @@
     </div>
     <div class="panel-body">
         <?php
+        echo $this->Form->input('id');
         echo $this->Form->input('nome', ['label' => 'Nome', 'div' => ['class' => 'col-xs-12 col-md-12']]);
         echo $this->Form->input('usuario', ['label' => 'Usuário', 'div' => ['class' => 'col-xs-12 col-md-6']]);
         echo $this->Form->input('senha', ['value' => '', 'type' => 'password', 'label' => 'Senha', 'div' => ['class' => 'col-xs-12 col-md-6']]);

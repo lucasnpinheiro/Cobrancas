@@ -122,10 +122,16 @@
         <?= $this->Html->script('/js/plugins/metisMenu/jquery.metisMenu.js') ?>
         <?= $this->Html->script('/js/plugins/slimscroll/jquery.slimscroll.min.js') ?>
         <?= $this->Html->script('/js/inspinia.js') ?>
+        <?= $this->Html->script('/js/app.js') ?>
+        <?= $this->Html->script('/js/plugins/masked-input/jquery.maskedinput.min.js') ?>
+        <?= $this->Html->script('/js/plugins/masked-input/mascaras.js') ?>
+        <?= $this->Html->script('/js/plugins/jquery-maskmoney/jquery.maskMoney.min.js') ?>
         <?= $this->Html->script('/js/plugins/pace/pace.min.js') ?>
         <?= $this->Html->script('/js/plugins/peity/jquery.peity.min.js') ?>
         <?= $this->Html->script('/js/plugins/pace/pace.min.js') ?>
         <?= $this->Html->script('/js/plugins/jquery-ui/jquery-ui.min.js') ?>
+        <?= $this->Html->script('/js/plugins/bootstrap-datepicker/bootstrap-datepicker.js') ?>
+        <?= $this->Html->script('/js/plugins/bootstrap-datepicker/locales/bootstrap-datepicker.pt-BR.js') ?>
         <?= $this->fetch('script') ?>
     </body>
 

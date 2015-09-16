@@ -3,21 +3,20 @@
 namespace App\Controller\Administrador;
 
 use App\Controller\Administrador\AdministradorAppController;
+
 /**
  * Faturas Controller
  *
  * @property \App\Model\Table\FaturasTable $Faturas
  */
-class FaturasController extends AdministradorAppController
-{
+class FaturasController extends AdministradorAppController {
 
     /**
      * Index method
      *
      * @return void
      */
-    public function index()
-    {
+    public function index() {
         $this->paginate = [
             'contain' => ['Usuarios']
         ];
@@ -32,8 +31,7 @@ class FaturasController extends AdministradorAppController
      * @return void
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
-    public function view($id = null)
-    {
+    public function view($id = null) {
         $fatura = $this->Faturas->get($id, [
             'contain' => ['Usuarios']
         ]);
@@ -46,10 +44,10 @@ class FaturasController extends AdministradorAppController
      *
      * @return void Redirects on successful add, renders view otherwise.
      */
-    public function add()
-    {
+    public function add() {
         $fatura = $this->Faturas->newEntity();
         if ($this->request->is('post')) {
+            $this->request->data['produtos'] = json_encode($this->request->data['produtos']);
             $fatura = $this->Faturas->patchEntity($fatura, $this->request->data);
             if ($this->Faturas->save($fatura)) {
                 $this->Flash->success(__('The fatura has been saved.'));
@@ -59,7 +57,9 @@ class FaturasController extends AdministradorAppController
             }
         }
         $usuarios = $this->Faturas->Usuarios->find('list', ['limit' => 200]);
-        $this->set(compact('fatura', 'usuarios'));
+        $this->loadModel('Produtos');
+        $produtos = $this->Produtos->find('list', ['keyField' => 'id', 'valueField' => 'slug', 'limit' => 200]);
+        $this->set(compact('fatura', 'usuarios', 'produtos'));
         $this->set('_serialize', ['fatura']);
     }
 
@@ -70,12 +70,12 @@ class FaturasController extends AdministradorAppController
      * @return void Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
-    public function edit($id = null)
-    {
+    public function edit($id = null) {
         $fatura = $this->Faturas->get($id, [
             'contain' => []
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
+            $this->request->data['produtos'] = json_encode($this->request->data['produtos']);
             $fatura = $this->Faturas->patchEntity($fatura, $this->request->data);
             if ($this->Faturas->save($fatura)) {
                 $this->Flash->success(__('The fatura has been saved.'));
@@ -85,7 +85,9 @@ class FaturasController extends AdministradorAppController
             }
         }
         $usuarios = $this->Faturas->Usuarios->find('list', ['limit' => 200]);
-        $this->set(compact('fatura', 'usuarios'));
+        $this->loadModel('Produtos');
+        $produtos = $this->Produtos->find('list', ['fields' => ['id', 'nome'], 'limit' => 200]);
+        $this->set(compact('fatura', 'usuarios', 'produtos'));
         $this->set('_serialize', ['fatura']);
     }
 
@@ -96,8 +98,7 @@ class FaturasController extends AdministradorAppController
      * @return void Redirects to index.
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
-    public function delete($id = null)
-    {
+    public function delete($id = null) {
         $this->request->allowMethod(['post', 'delete']);
         $fatura = $this->Faturas->get($id);
         if ($this->Faturas->delete($fatura)) {
@@ -107,4 +108,5 @@ class FaturasController extends AdministradorAppController
         }
         return $this->redirect(['action' => 'index']);
     }
+
 }

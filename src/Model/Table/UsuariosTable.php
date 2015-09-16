@@ -88,4 +88,14 @@ class UsuariosTable extends Table {
         return $rules;
     }
 
+    public function beforeSave(\Cake\Event\Event $event, \Cake\ORM\Entity $entity) {
+        if (!empty($entity->senha) AND strlen($entity->senha) < 60) {
+            $senha = (new \Cake\Auth\DefaultPasswordHasher())->hash($entity->senha);
+            $entity->senha = $senha;
+        } else {
+            unset($entity->senha);
+        }
+        return true;
+    }
+
 }

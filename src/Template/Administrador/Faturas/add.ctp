@@ -5,17 +5,17 @@
     </div>
     <div class="panel-body">
         <?php
-        echo $this->Form->input('data_vencimento');
-        echo $this->Form->input('usuario_id', ['options' => $usuarios]);
-        echo $this->Form->input('produtos');
-        echo $this->Form->input('valor');
-        echo $this->Form->status('status');
-        echo $this->Form->input('data_pagamento', ['empty' => true, 'default' => '']);
-        echo $this->Form->input('juros');
-        echo $this->Form->input('codigo');
-        echo $this->Form->input('token_moip');
-        echo $this->Form->input('valor_recebido');
-        echo $this->Form->input('desconto_moip');
+        echo $this->Form->data('data_vencimento', ['div' => ['class' => 'col-xs-12 col-md-6']]);
+        echo $this->Form->input('usuario_id', ['options' => $usuarios, 'div' => ['class' => 'col-xs-12 col-md-6']]);
+        echo $this->Form->select2('produtos', ['multiple' => true, 'div' => ['class' => 'col-xs-12 col-md-12']]);
+        echo $this->Form->moeda('valor', ['div' => ['class' => 'col-xs-12 col-md-3']]);
+        echo $this->Form->status('status', ['div' => ['class' => 'col-xs-12 col-md-3']]);
+        echo $this->Form->data('data_pagamento', ['empty' => true, 'default' => '', 'div' => ['class' => 'col-xs-12 col-md-3']]);
+        echo $this->Form->moeda('juros', ['div' => ['class' => 'col-xs-12 col-md-3']]);
+        echo $this->Form->input('codigo', ['div' => ['class' => 'col-xs-12 col-md-3']]);
+        echo $this->Form->input('token_moip', ['div' => ['class' => 'col-xs-12 col-md-3']]);
+        echo $this->Form->moeda('valor_recebido', ['div' => ['class' => 'col-xs-12 col-md-3']]);
+        echo $this->Form->moeda('desconto_moip', ['div' => ['class' => 'col-xs-12 col-md-3']]);
         ?>
     </div>
     <div class="panel-footer text-right">

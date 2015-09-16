@@ -7,7 +7,7 @@
         <?php
         echo $this->Form->input('nome');
         echo $this->Form->editor('descricao');
-        echo $this->Form->input('valor');
+        echo $this->Form->moeda('valor');
         echo $this->Form->status('status');
         ?>
     </div>

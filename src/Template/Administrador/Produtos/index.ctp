@@ -19,7 +19,7 @@
                 <?php foreach ($produtos as $produto): ?>
                     <tr>
                         <td><?= h($produto->nome) ?></td>
-                        <td><?= $this->Number->format($produto->valor) ?></td>
+                        <td><?= $this->Html->moeda($produto->valor) ?></td>
                         <td><?= h($produto->created) ?></td>
                         <td><?= h($produto->modified) ?></td>
                         <td><?= h($produto->updated) ?></td>

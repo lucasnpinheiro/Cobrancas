@@ -44,6 +44,8 @@ class UsuariosController extends AdministradorAppController {
     public function add() {
         $usuario = $this->Usuarios->newEntity();
         if ($this->request->is('post')) {
+            $this->request->data['telefones'] = json_encode($this->request->data['telefones']);
+            $this->request->data['emails'] = json_encode($this->request->data['emails']);
             $usuario = $this->Usuarios->patchEntity($usuario, $this->request->data);
             if ($this->Usuarios->save($usuario)) {
                 $this->Flash->success(__('The usuario has been saved.'));
@@ -68,6 +70,8 @@ class UsuariosController extends AdministradorAppController {
             'contain' => []
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
+            $this->request->data['telefones'] = json_encode($this->request->data['telefones']);
+            $this->request->data['emails'] = json_encode($this->request->data['emails']);
             $usuario = $this->Usuarios->patchEntity($usuario, $this->request->data);
             if ($this->Usuarios->save($usuario)) {
                 $this->Flash->success(__('The usuario has been saved.'));

@@ -48,7 +48,7 @@ class ProdutosTable extends Table
             ->allowEmpty('descricao');
             
         $validator
-            ->add('valor', 'valid', ['rule' => 'numeric'])
+            ->add('valor', 'valid', ['rule' => 'money'])
             ->requirePresence('valor', 'create')
             ->notEmpty('valor');
             

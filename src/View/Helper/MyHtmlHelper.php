@@ -13,7 +13,7 @@
 
 namespace App\View\Helper;
 
-use Bootstrap3\View\Helper\BootstrapHtmlHelper;
+use Bootstrap\View\Helper\BootstrapHtmlHelper;
 
 class MyHtmlHelper extends BootstrapHtmlHelper {
 
@@ -22,6 +22,7 @@ class MyHtmlHelper extends BootstrapHtmlHelper {
         if (isset($config['useFontAwesome'])) {
             $this->_useFontAwesome = $config['useFontAwesome'];
         }
+        $this->helpers[] = 'Number';
         parent::__construct($view, $config);
     }
 
@@ -133,6 +134,83 @@ class MyHtmlHelper extends BootstrapHtmlHelper {
             return $this->icon($icon) . ' ' . $title;
         }
         return $title . ' ' . $this->icon($icon);
+    }
+
+    public function simNao($id) {
+        $r = [
+            0 => ['text' => __('Não'), 'class' => 'danger'],
+            1 => ['text' => __('Sim'), 'class' => 'success'],
+        ];
+        return $this->label($r[$id]['text'], $r[$id]['class']);
+    }
+
+    public function data($data) {
+        return date('d/m/Y', strtotime($data));
+    }
+
+    public function moeda($value, $options = []) {
+        $currency = [
+            'before' => 'R$ ',
+            'zero' => '0,00',
+            'places' => '2',
+            'precision' => '2',
+            'locale' => 'pt_BR',
+        ];
+        $currency = \Cake\Utility\Hash::merge($currency, $options);
+        return $this->Number->format($value, $currency);
+    }
+
+    public function dataHora($data) {
+        return date('d/m/Y H:i:s', strtotime($data));
+    }
+
+    public function mask($val, $mask) {
+        $maskared = '';
+        $k = 0;
+        for ($i = 0; $i <= strlen($mask) - 1; $i++) {
+            if ($mask[$i] == '#') {
+                if (isset($val[$k]))
+                    $maskared .= $val[$k++];
+            } else {
+                if (isset($mask[$i]))
+                    $maskared .= $mask[$i];
+            }
+        }
+        return $maskared;
+    }
+
+    public function cpfCnpj($str) {
+        $str = str_replace(array(' ', '.', '-', '/'), '', $str);
+        if (strlen($str) == 14) {
+            return $this->mask($str, '##.###.###/####-##');
+        } else if (strlen($str) == 11) {
+            return $this->mask($str, '###.###.###-##');
+        }
+        return $str;
+    }
+
+    /**
+     * Mostrar uma data em tempo
+     *
+     * @param integer $dataHora Data e hora em timestamp, dd/mm/YYYY ou null para atual
+     * @param string $limite null, caso não haja expiração ou então, forneça um tempo usando o formato inglês para strtotime: Ex: 1 year
+     * @return string Descrição da data em tempo ex.: a 1 minuto, a 1 semana
+     * @access public
+     */
+    public function tempo($dataHora = null, $limite = '30 days') {
+        $datetime1 = new \DateTime($dataHora);
+        $datetime2 = new \DateTime(date('YmdHis'));
+        $interval = $datetime1->diff($datetime2);
+
+        if ($interval->y > 0) {
+            return 'mais de 1 ano';
+        } else if ($interval->m > 0) {
+            return 'mais de 1 mês';
+        } else if ($interval->d > 0) {
+            return 'mais de 1 dia';
+        } else {
+            return $interval->h . ($interval->h > 1 ? 'horas' : 'hora') . ' ' . $interval->i . ($interval->i > 1 ? 'minutos' : 'minuto') . ' e ' . $interval->s . ($interval->s > 1 ? 'segundos' : 'segundo');
+        }
     }
 
 }
