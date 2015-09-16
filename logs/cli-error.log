@@ -19,3 +19,68 @@ Stack Trace:
 #16 {main}
 
 
+2015-09-16 15:14:30 Error: [Cake\Console\Exception\MissingShellException] Shell class for "Configuracoes" could not be found.
+Exception Attributes: array (
+  'class' => 'Configuracoes',
+)
+Stack Trace:
+#0 /home/lucas/NetBeansProjects/Lucas/Cobrancas/vendor/cakephp/cakephp/src/Console/ShellDispatcher.php(201): Cake\Console\ShellDispatcher->findShell('configuracoes')
+#1 /home/lucas/NetBeansProjects/Lucas/Cobrancas/vendor/cakephp/cakephp/src/Console/ShellDispatcher.php(175): Cake\Console\ShellDispatcher->_dispatch()
+#2 /home/lucas/NetBeansProjects/Lucas/Cobrancas/vendor/cakephp/cakephp/src/Console/ShellDispatcher.php(126): Cake\Console\ShellDispatcher->dispatch()
+#3 /home/lucas/NetBeansProjects/Lucas/Cobrancas/bin/cake.php(33): Cake\Console\ShellDispatcher::run(Array)
+#4 {main}
+
+
+2015-09-16 15:14:33 Error: [Cake\Console\Exception\MissingShellException] Shell class for "Configuracoessql" could not be found.
+Exception Attributes: array (
+  'class' => 'Configuracoessql',
+)
+Stack Trace:
+#0 /home/lucas/NetBeansProjects/Lucas/Cobrancas/vendor/cakephp/cakephp/src/Console/ShellDispatcher.php(201): Cake\Console\ShellDispatcher->findShell('configuracoessq...')
+#1 /home/lucas/NetBeansProjects/Lucas/Cobrancas/vendor/cakephp/cakephp/src/Console/ShellDispatcher.php(175): Cake\Console\ShellDispatcher->_dispatch()
+#2 /home/lucas/NetBeansProjects/Lucas/Cobrancas/vendor/cakephp/cakephp/src/Console/ShellDispatcher.php(126): Cake\Console\ShellDispatcher->dispatch()
+#3 /home/lucas/NetBeansProjects/Lucas/Cobrancas/bin/cake.php(33): Cake\Console\ShellDispatcher::run(Array)
+#4 {main}
+
+
+2015-09-16 15:14:44 Error: [PDOException] SQLSTATE[HY000] [1045] Access denied for user 'root'@'localhost' (using password: YES)
+Stack Trace:
+#0 /home/lucas/NetBeansProjects/Lucas/Cobrancas/vendor/cakephp/cakephp/src/Database/Driver/PDODriverTrait.php(48): PDO->__construct('mysql:host=loca...', 'root', '123456', Array)
+#1 /home/lucas/NetBeansProjects/Lucas/Cobrancas/vendor/cakephp/cakephp/src/Database/Driver/Mysql.php(89): Cake\Database\Driver\Mysql->_connect('mysql:host=loca...', Array)
+#2 /home/lucas/NetBeansProjects/Lucas/Cobrancas/vendor/cakephp/cakephp/src/Database/Schema/BaseSchema.php(46): Cake\Database\Driver\Mysql->connect()
+#3 /home/lucas/NetBeansProjects/Lucas/Cobrancas/vendor/cakephp/cakephp/src/Database/Dialect/MysqlDialectTrait.php(62): Cake\Database\Schema\BaseSchema->__construct(Object(Cake\Database\Driver\Mysql))
+#4 /home/lucas/NetBeansProjects/Lucas/Cobrancas/vendor/cakephp/cakephp/src/Database/Schema/Collection.php(52): Cake\Database\Driver\Mysql->schemaDialect()
+#5 /home/lucas/NetBeansProjects/Lucas/Cobrancas/vendor/cakephp/cakephp/src/Database/Schema/CachedCollection.php(44): Cake\Database\Schema\Collection->__construct(Object(Cake\Database\Connection))
+#6 /home/lucas/NetBeansProjects/Lucas/Cobrancas/vendor/cakephp/cakephp/src/Database/Connection.php(319): Cake\Database\Schema\CachedCollection->__construct(Object(Cake\Database\Connection), true)
+#7 /home/lucas/NetBeansProjects/Lucas/Cobrancas/src/Shell/ConfiguracoesSqlShell.php(50): Cake\Database\Connection->schemaCollection()
+#8 /home/lucas/NetBeansProjects/Lucas/Cobrancas/src/Shell/ConfiguracoesSqlShell.php(24): App\Shell\ConfiguracoesSqlShell->install()
+#9 [internal function]: App\Shell\ConfiguracoesSqlShell->main()
+#10 /home/lucas/NetBeansProjects/Lucas/Cobrancas/vendor/cakephp/cakephp/src/Console/Shell.php(391): call_user_func_array(Array, Array)
+#11 /home/lucas/NetBeansProjects/Lucas/Cobrancas/vendor/cakephp/cakephp/src/Console/ShellDispatcher.php(204): Cake\Console\Shell->runCommand(Array, true)
+#12 /home/lucas/NetBeansProjects/Lucas/Cobrancas/vendor/cakephp/cakephp/src/Console/ShellDispatcher.php(175): Cake\Console\ShellDispatcher->_dispatch()
+#13 /home/lucas/NetBeansProjects/Lucas/Cobrancas/vendor/cakephp/cakephp/src/Console/ShellDispatcher.php(126): Cake\Console\ShellDispatcher->dispatch()
+#14 /home/lucas/NetBeansProjects/Lucas/Cobrancas/bin/cake.php(33): Cake\Console\ShellDispatcher::run(Array)
+#15 {main}
+
+
+2015-09-16 15:15:12 Error: [Cake\Database\Exception] SQLSTATE[42S02]: Base table or view not found: 1146 Table 'pinheir_cobrancas.configuracoes' doesn't exist
+Stack Trace:
+#0 /home/lucas/NetBeansProjects/Lucas/Cobrancas/vendor/cakephp/cakephp/src/Database/Schema/Collection.php(96): Cake\Database\Schema\Collection->_reflect('Column', 'configuracoes', Array, Object(Cake\Database\Schema\Table))
+#1 /home/lucas/NetBeansProjects/Lucas/Cobrancas/vendor/cakephp/cakephp/src/Database/Schema/CachedCollection.php(65): Cake\Database\Schema\Collection->describe('configuracoes', Array)
+#2 /home/lucas/NetBeansProjects/Lucas/Cobrancas/vendor/cakephp/cakephp/src/ORM/Table.php(426): Cake\Database\Schema\CachedCollection->describe('configuracoes')
+#3 /home/lucas/NetBeansProjects/Lucas/Cobrancas/vendor/cakephp/cakephp/src/ORM/Query.php(142): Cake\ORM\Table->schema()
+#4 /home/lucas/NetBeansProjects/Lucas/Cobrancas/vendor/cakephp/cakephp/src/ORM/Query.php(124): Cake\ORM\Query->addDefaultTypes(Object(Cake\ORM\Table))
+#5 /home/lucas/NetBeansProjects/Lucas/Cobrancas/vendor/cakephp/cakephp/src/ORM/Table.php(1218): Cake\ORM\Query->__construct(Object(Cake\Database\Connection), Object(Cake\ORM\Table))
+#6 /home/lucas/NetBeansProjects/Lucas/Cobrancas/vendor/cakephp/cakephp/src/ORM/Table.php(921): Cake\ORM\Table->query()
+#7 /home/lucas/NetBeansProjects/Lucas/Cobrancas/src/Shell/ConfiguracoesSqlShell.php(91): Cake\ORM\Table->find('all')
+#8 /home/lucas/NetBeansProjects/Lucas/Cobrancas/src/Shell/ConfiguracoesSqlShell.php(85): App\Shell\ConfiguracoesSqlShell->findDados('configuracoes', Array)
+#9 /home/lucas/NetBeansProjects/Lucas/Cobrancas/src/Shell/ConfiguracoesSqlShell.php(26): App\Shell\ConfiguracoesSqlShell->dados()
+#10 [internal function]: App\Shell\ConfiguracoesSqlShell->main()
+#11 /home/lucas/NetBeansProjects/Lucas/Cobrancas/vendor/cakephp/cakephp/src/Console/Shell.php(391): call_user_func_array(Array, Array)
+#12 /home/lucas/NetBeansProjects/Lucas/Cobrancas/vendor/cakephp/cakephp/src/Console/ShellDispatcher.php(204): Cake\Console\Shell->runCommand(Array, true)
+#13 /home/lucas/NetBeansProjects/Lucas/Cobrancas/vendor/cakephp/cakephp/src/Console/ShellDispatcher.php(175): Cake\Console\ShellDispatcher->_dispatch()
+#14 /home/lucas/NetBeansProjects/Lucas/Cobrancas/vendor/cakephp/cakephp/src/Console/ShellDispatcher.php(126): Cake\Console\ShellDispatcher->dispatch()
+#15 /home/lucas/NetBeansProjects/Lucas/Cobrancas/bin/cake.php(33): Cake\Console\ShellDispatcher::run(Array)
+#16 {main}
+
+
