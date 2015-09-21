@@ -15,22 +15,57 @@
 CREATE TABLE IF NOT EXISTS `faturas` (
 `id` INTEGER(11) NOT NULL AUTO_INCREMENT,
 `data_vencimento` DATE NOT NULL,
-`usuario_id` INTEGER(11) NOT NULL,
-`produtos` TEXT NOT NULL,
-`valor` FLOAT(11,2) NOT NULL,
-`status` INTEGER(1) NOT NULL DEFAULT 0 COMMENT '0 - Aguardando Pagamento | 1 - Pago | 2 - Atrazado | 3 - Cancelado',
 `data_pagamento` DATE DEFAULT NULL,
+`usuario_id` INTEGER(11) NOT NULL,
+`pedido_id` INTEGER(11) NOT NULL,
+`status` INTEGER(1) NOT NULL DEFAULT 0 COMMENT '0 - Aguardando Pagamento | 1 - Pago | 2 - Atrazado | 3 - Cancelado | 9 - Excluido',
+`valor` FLOAT(11,2) NOT NULL,
 `juros` FLOAT(11,2) DEFAULT NULL,
-`created` DATETIME NOT NULL,
-`updated` DATETIME DEFAULT NULL,
-`modified` DATETIME DEFAULT NULL,
 `codigo` VARCHAR(45) NOT NULL,
-`token_moip` VARCHAR(500) DEFAULT NULL,
+`token` TEXT DEFAULT NULL,
 `valor_recebido` FLOAT(11,2) DEFAULT NULL,
-`desconto_moip` FLOAT(11,2) DEFAULT NULL,
+`created` DATETIME NOT NULL,
+`modified` DATETIME DEFAULT NULL,
 PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 -- Fim das estrutura da tabela `faturas` --
+
+
+-- Inicio das estrutura da tabela `pedidos` --
+/* !40101 SET character_set_client = utf8 */;
+CREATE TABLE IF NOT EXISTS `pedidos` (
+`id` INTEGER(11) NOT NULL AUTO_INCREMENT,
+`usuario_id` INTEGER(11) DEFAULT NULL,
+`usuarios_dominio_id` INTEGER(11) DEFAULT NULL,
+`valor` FLOAT(11,2) DEFAULT NULL,
+`juros` FLOAT(11,2) DEFAULT NULL,
+`desconto` FLOAT(11,2) DEFAULT NULL,
+`total` FLOAT(11,2) DEFAULT NULL,
+`status` INTEGER(1) DEFAULT NULL COMMENT '0 - Inativo | 1 - Ativo | 9 - Excluido',
+`periodo_emissao` INTEGER(1) DEFAULT NULL COMMENT '1 - Mensal | 2 - Trimestral | 3 - Semestral | 1 - Anual',
+`data_ultima_emissao` DATE DEFAULT NULL,
+`created` DATETIME DEFAULT NULL,
+`modified` DATETIME DEFAULT NULL,
+PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+-- Fim das estrutura da tabela `pedidos` --
+
+
+-- Inicio das estrutura da tabela `pedidos_produtos` --
+/* !40101 SET character_set_client = utf8 */;
+CREATE TABLE IF NOT EXISTS `pedidos_produtos` (
+`id` INTEGER(11) NOT NULL AUTO_INCREMENT,
+`pedido_id` INTEGER(11) DEFAULT NULL,
+`produto_id` INTEGER(11) DEFAULT NULL,
+`valor` FLOAT(11,2) DEFAULT NULL,
+`desconto` FLOAT(11,2) DEFAULT NULL,
+`juros` FLOAT(11,2) DEFAULT NULL,
+`status` INTEGER(1) DEFAULT NULL COMMENT '0 - Inativo | 1 - Ativo | 9 - Excluido',
+`created` DATETIME DEFAULT NULL,
+`modified` DATETIME DEFAULT NULL,
+PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+-- Fim das estrutura da tabela `pedidos_produtos` --
 
 
 -- Inicio das estrutura da tabela `produtos` --

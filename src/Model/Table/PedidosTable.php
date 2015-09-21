@@ -1,19 +1,21 @@
 <?php
 namespace App\Model\Table;
 
-use App\Model\Entity\Fatura;
+use App\Model\Entity\Pedido;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
 /**
- * Faturas Model
+ * Pedidos Model
  *
  * @property \Cake\ORM\Association\BelongsTo $Usuarios
- * @property \Cake\ORM\Association\BelongsTo $Pedidos
+ * @property \Cake\ORM\Association\BelongsTo $UsuariosDominios
+ * @property \Cake\ORM\Association\HasMany $Faturas
+ * @property \Cake\ORM\Association\BelongsToMany $Produtos
  */
-class FaturasTable extends Table
+class PedidosTable extends Table
 {
 
     /**
@@ -26,19 +28,25 @@ class FaturasTable extends Table
     {
         parent::initialize($config);
 
-        $this->table('faturas');
-        $this->displayField('usuario_id');
+        $this->table('pedidos');
+        $this->displayField('id');
         $this->primaryKey('id');
 
         $this->addBehavior('Timestamp');
 
         $this->belongsTo('Usuarios', [
-            'foreignKey' => 'usuario_id',
-            'joinType' => 'INNER'
+            'foreignKey' => 'usuario_id'
         ]);
-        $this->belongsTo('Pedidos', [
+        $this->belongsTo('UsuariosDominios', [
+            'foreignKey' => 'usuarios_dominio_id'
+        ]);
+        $this->hasMany('Faturas', [
+            'foreignKey' => 'pedido_id'
+        ]);
+        $this->belongsToMany('Produtos', [
             'foreignKey' => 'pedido_id',
-            'joinType' => 'INNER'
+            'targetForeignKey' => 'produto_id',
+            'joinTable' => 'pedidos_produtos'
         ]);
     }
 
@@ -55,38 +63,32 @@ class FaturasTable extends Table
             ->allowEmpty('id', 'create');
 
         $validator
-            ->add('data_vencimento', 'valid', ['rule' => 'date'])
-            ->requirePresence('data_vencimento', 'create')
-            ->notEmpty('data_vencimento');
-
-        $validator
-            ->add('data_pagamento', 'valid', ['rule' => 'date'])
-            ->allowEmpty('data_pagamento');
-
-        $validator
-            ->add('status', 'valid', ['rule' => 'numeric'])
-            ->requirePresence('status', 'create')
-            ->notEmpty('status');
-
-        $validator
             ->add('valor', 'valid', ['rule' => 'numeric'])
-            ->requirePresence('valor', 'create')
-            ->notEmpty('valor');
+            ->allowEmpty('valor');
 
         $validator
             ->add('juros', 'valid', ['rule' => 'numeric'])
             ->allowEmpty('juros');
 
         $validator
-            ->requirePresence('codigo', 'create')
-            ->notEmpty('codigo');
+            ->add('desconto', 'valid', ['rule' => 'numeric'])
+            ->allowEmpty('desconto');
 
         $validator
-            ->allowEmpty('token');
+            ->add('total', 'valid', ['rule' => 'numeric'])
+            ->allowEmpty('total');
 
         $validator
-            ->add('valor_recebido', 'valid', ['rule' => 'numeric'])
-            ->allowEmpty('valor_recebido');
+            ->add('status', 'valid', ['rule' => 'numeric'])
+            ->allowEmpty('status');
+
+        $validator
+            ->add('periodo_emissao', 'valid', ['rule' => 'numeric'])
+            ->allowEmpty('periodo_emissao');
+
+        $validator
+            ->add('data_ultima_emissao', 'valid', ['rule' => 'date'])
+            ->allowEmpty('data_ultima_emissao');
 
         return $validator;
     }
@@ -101,7 +103,7 @@ class FaturasTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->existsIn(['usuario_id'], 'Usuarios'));
-        $rules->add($rules->existsIn(['pedido_id'], 'Pedidos'));
+        $rules->add($rules->existsIn(['usuarios_dominio_id'], 'UsuariosDominios'));
         return $rules;
     }
 }

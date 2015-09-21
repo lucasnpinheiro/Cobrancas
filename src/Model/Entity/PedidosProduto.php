@@ -4,24 +4,21 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * Fatura Entity.
+ * PedidosProduto Entity.
  *
  * @property int $id
- * @property \Cake\I18n\Time $data_vencimento
- * @property \Cake\I18n\Time $data_pagamento
- * @property int $usuario_id
- * @property \App\Model\Entity\Usuario $usuario
  * @property int $pedido_id
- * @property int $status
+ * @property \App\Model\Entity\Pedido $pedido
+ * @property int $produto_id
+ * @property \App\Model\Entity\Produto $produto
  * @property float $valor
+ * @property float $desconto
  * @property float $juros
- * @property string $codigo
- * @property string $token
- * @property float $valor_recebido
+ * @property int $status
  * @property \Cake\I18n\Time $created
  * @property \Cake\I18n\Time $modified
  */
-class Fatura extends Entity
+class PedidosProduto extends Entity
 {
 
     /**

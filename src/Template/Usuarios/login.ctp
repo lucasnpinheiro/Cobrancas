@@ -4,7 +4,7 @@
             <h1 class="logo-name">IN+</h1>
         </div>
         <h3>Agência Voxel</h3>
-        <p><?php echo $this->Flash->render('auth') ?></p>
+        <p><?php echo $this->Flash->render(); ?></p>
         <p>Área administrativa</p>
         <?php
         echo $this->Form->create('Usuarios', array(

@@ -38,7 +38,7 @@ class AdministradorAppController extends AppController {
      */
     public function initialize() {
         parent::initialize();
-        $this->layout = 'administrador';
+        $this->viewBuilder()->layout('administrador');
     }
 
     public function isAuthorized($user) {

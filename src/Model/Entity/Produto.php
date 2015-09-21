@@ -15,18 +15,21 @@ class Produto extends Entity {
      * @var array
      */
     protected $_accessible = [
-        '*' => true
+        '*' => true,
     ];
     protected $_virtual = ['slug'];
 
     public function _getSlug() {
-        return $this->_properties ['nome'] . ' - ' . \Cake\I18n\Number::format($this->_properties['valor'], [
-                    'before' => 'R$ ',
-                    'zero' => '0,00',
-                    'places' => '2',
-                    'precision' => '2',
-                    'locale' => 'pt_BR',
-                ]);
+        if (isset($this->_properties['nome']) AND isset($this->_properties['valor'])) {
+            return $this->_properties['nome'] . ' - ' . \Cake\I18n\Number::format($this->_properties['valor'], [
+                        'before' => 'R$ ',
+                        'zero' => '0,00',
+                        'places' => '2',
+                        'precision' => '2',
+                        'locale' => 'pt_BR',
+            ]);
+        }
+        return null;
     }
 
 }
