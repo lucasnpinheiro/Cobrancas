@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Model\Table;
 
 use App\Model\Entity\Pedido;
@@ -15,8 +16,7 @@ use Cake\Validation\Validator;
  * @property \Cake\ORM\Association\HasMany $Faturas
  * @property \Cake\ORM\Association\BelongsToMany $Produtos
  */
-class PedidosTable extends Table
-{
+class PedidosTable extends Table {
 
     /**
      * Initialize method
@@ -24,8 +24,7 @@ class PedidosTable extends Table
      * @param array $config The configuration for the Table.
      * @return void
      */
-    public function initialize(array $config)
-    {
+    public function initialize(array $config) {
         parent::initialize($config);
 
         $this->table('pedidos');
@@ -56,39 +55,38 @@ class PedidosTable extends Table
      * @param \Cake\Validation\Validator $validator Validator instance.
      * @return \Cake\Validation\Validator
      */
-    public function validationDefault(Validator $validator)
-    {
+    public function validationDefault(Validator $validator) {
         $validator
-            ->add('id', 'valid', ['rule' => 'numeric'])
-            ->allowEmpty('id', 'create');
+                ->add('id', 'valid', ['rule' => 'numeric'])
+                ->allowEmpty('id', 'create');
 
         $validator
-            ->add('valor', 'valid', ['rule' => 'numeric'])
-            ->allowEmpty('valor');
+                ->add('valor', 'valid', ['rule' => 'money'])
+                ->allowEmpty('valor');
 
         $validator
-            ->add('juros', 'valid', ['rule' => 'numeric'])
-            ->allowEmpty('juros');
+                ->add('juros', 'valid', ['rule' => 'money'])
+                ->allowEmpty('juros');
 
         $validator
-            ->add('desconto', 'valid', ['rule' => 'numeric'])
-            ->allowEmpty('desconto');
+                ->add('desconto', 'valid', ['rule' => 'money'])
+                ->allowEmpty('desconto');
 
         $validator
-            ->add('total', 'valid', ['rule' => 'numeric'])
-            ->allowEmpty('total');
+                ->add('total', 'valid', ['rule' => 'money'])
+                ->allowEmpty('total');
 
         $validator
-            ->add('status', 'valid', ['rule' => 'numeric'])
-            ->allowEmpty('status');
+                ->add('status', 'valid', ['rule' => 'numeric'])
+                ->allowEmpty('status');
 
         $validator
-            ->add('periodo_emissao', 'valid', ['rule' => 'numeric'])
-            ->allowEmpty('periodo_emissao');
+                ->add('periodo_emissao', 'valid', ['rule' => 'numeric'])
+                ->allowEmpty('periodo_emissao');
 
         $validator
-            ->add('data_ultima_emissao', 'valid', ['rule' => 'date'])
-            ->allowEmpty('data_ultima_emissao');
+                ->add('data_ultima_emissao', 'valid', ['rule' => ['date', 'dmy']])
+                ->allowEmpty('data_ultima_emissao');
 
         return $validator;
     }
@@ -100,10 +98,30 @@ class PedidosTable extends Table
      * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
      * @return \Cake\ORM\RulesChecker
      */
-    public function buildRules(RulesChecker $rules)
-    {
+    public function buildRules(RulesChecker $rules) {
         $rules->add($rules->existsIn(['usuario_id'], 'Usuarios'));
         $rules->add($rules->existsIn(['usuarios_dominio_id'], 'UsuariosDominios'));
         return $rules;
     }
+
+    public function save(\Cake\Datasource\EntityInterface $entity, $options = array()) {
+        $return = parent::save($entity, $options);
+        $id = $return->id;
+        $list = $this->Produtos->find('all')->toArray();
+        if(count($list) > 0){
+            foreach ($list as $key => $value) {
+                $prod_pedidos = \Cake\ORM\TableRegistry::get('pedidos_produtos');
+                $pFind = $prod_pedidos->find()->where(['pedido_id'=>$id, 'produto_id'=>$value->id])->first();
+                debug($pFind);
+                if(count($pFind)){
+                    $pFind->valor = $value->valor;
+                    $pFind->desconto = 0;
+                    $pFind->juros = 0;
+                }
+                $prod_pedidos->save($pFind);
+            }
+        }
+        return parent::save($entity, $options);
+    }
+
 }

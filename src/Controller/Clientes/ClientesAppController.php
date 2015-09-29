@@ -37,8 +37,8 @@ class ClientesAppController extends AppController {
      * @return void
      */
     public function initialize() {
-        $this->layout = 'cliente';
         parent::initialize();
+        $this->viewBuilder()->layout('cliente');
     }
 
     public function isAuthorized($user) {

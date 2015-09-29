@@ -1,23 +1,22 @@
 <?php
-namespace App\Controller;
 
-use App\Controller\AppController;
+namespace App\Controller\Administrador;
+
+use App\Controller\Administrador\AdministradorAppController;
 
 /**
  * PedidosProdutos Controller
  *
  * @property \App\Model\Table\PedidosProdutosTable $PedidosProdutos
  */
-class PedidosProdutosController extends AppController
-{
+class PedidosProdutosController extends AdministradorAppController {
 
     /**
      * Index method
      *
      * @return void
      */
-    public function index()
-    {
+    public function index() {
         $this->paginate = [
             'contain' => ['Pedidos', 'Produtos']
         ];
@@ -32,8 +31,7 @@ class PedidosProdutosController extends AppController
      * @return void
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
-    public function view($id = null)
-    {
+    public function view($id = null) {
         $pedidosProduto = $this->PedidosProdutos->get($id, [
             'contain' => ['Pedidos', 'Produtos']
         ]);
@@ -46,8 +44,7 @@ class PedidosProdutosController extends AppController
      *
      * @return void Redirects on successful add, renders view otherwise.
      */
-    public function add()
-    {
+    public function add() {
         $pedidosProduto = $this->PedidosProdutos->newEntity();
         if ($this->request->is('post')) {
             $pedidosProduto = $this->PedidosProdutos->patchEntity($pedidosProduto, $this->request->data);
@@ -71,8 +68,7 @@ class PedidosProdutosController extends AppController
      * @return void Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
-    public function edit($id = null)
-    {
+    public function edit($id = null) {
         $pedidosProduto = $this->PedidosProdutos->get($id, [
             'contain' => []
         ]);
@@ -98,8 +94,7 @@ class PedidosProdutosController extends AppController
      * @return void Redirects to index.
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
-    public function delete($id = null)
-    {
+    public function delete($id = null) {
         $this->request->allowMethod(['post', 'delete']);
         $pedidosProduto = $this->PedidosProdutos->get($id);
         if ($this->PedidosProdutos->delete($pedidosProduto)) {
@@ -109,4 +104,5 @@ class PedidosProdutosController extends AppController
         }
         return $this->redirect(['action' => 'index']);
     }
+
 }

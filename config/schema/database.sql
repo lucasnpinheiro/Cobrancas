@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS `pedidos` (
 `desconto` FLOAT(11,2) DEFAULT NULL,
 `total` FLOAT(11,2) DEFAULT NULL,
 `status` INTEGER(1) DEFAULT NULL COMMENT '0 - Inativo | 1 - Ativo | 9 - Excluido',
-`periodo_emissao` INTEGER(1) DEFAULT NULL COMMENT '1 - Mensal | 2 - Trimestral | 3 - Semestral | 1 - Anual',
+`periodo_emissao` INTEGER(1) DEFAULT NULL COMMENT '1 - Mensal | 2 - Trimestral | 3 - Semestral | 4 - Anual',
 `data_ultima_emissao` DATE DEFAULT NULL,
 `created` DATETIME DEFAULT NULL,
 `modified` DATETIME DEFAULT NULL,

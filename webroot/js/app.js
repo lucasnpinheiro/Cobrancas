@@ -22,6 +22,13 @@ cake.util.mascaras = function () {
         decimal: ',',
         affixesStay: false
     });
+    $(".juros").maskMoney({
+        suffix: ' %',
+        allowNegative: false,
+        thousands: '.',
+        decimal: ',',
+        affixesStay: false
+    });
 
 };
 

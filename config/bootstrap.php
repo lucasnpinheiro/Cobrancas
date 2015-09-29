@@ -98,6 +98,16 @@ mb_internal_encoding(Configure::read('App.encoding'));
  */
 ini_set('intl.default_locale', 'pt_BR');
 
+// Habilita o parseamento de datas localizadas
+Type::build('date')->useLocaleParser()->setLocaleFormat('dd/M/yyyy');
+Type::build('datetime')->useLocaleParser()->setLocaleFormat('dd/M/yyy HH:ii:ss');
+Type::build('timestamp')->useLocaleParser()->setLocaleFormat('dd/M/yyy HH:ii:ss');
+
+// Habilita o parseamento de decimal localizaddos
+Type::build('decimal')->useLocaleParser();
+Type::build('float')->useLocaleParser();
+//Type::build('datetime')->useLocaleParser();
+
 /**
  * Register application error and exception handlers.
  */
@@ -196,12 +206,3 @@ DispatcherFactory::add('ControllerFactory');
  * Enable default locale format parsing.
  * This is needed for matching the auto-localized string output of Time() class when parsing dates.
  */
-// Habilita o parseamento de datas localizadas
-Type::build('date')->useLocaleParser()->setLocaleFormat('d/m/Y');
-Type::build('datetime')->useLocaleParser()->setLocaleFormat('d/m/Y H:i:s');
-Type::build('timestamp')->useLocaleParser()->setLocaleFormat('d/m/Y H:i:s');
-
-// Habilita o parseamento de decimal localizaddos
-Type::build('decimal')->useLocaleParser();
-Type::build('float')->useLocaleParser();
-Type::build('datetime')->useLocaleParser();

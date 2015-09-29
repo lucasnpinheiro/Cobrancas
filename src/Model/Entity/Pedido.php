@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
@@ -23,8 +24,7 @@ use Cake\ORM\Entity;
  * @property \App\Model\Entity\Fatura[] $faturas
  * @property \App\Model\Entity\Produto[] $produtos
  */
-class Pedido extends Entity
-{
+class Pedido extends Entity {
 
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
@@ -39,4 +39,5 @@ class Pedido extends Entity
         '*' => true,
         'id' => false,
     ];
+
 }

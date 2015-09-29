@@ -50,6 +50,13 @@
                                     </ul>
                                 </li>
                                 <li class="dropdown">
+                                    <a aria-expanded="false" role="button" href="" class="dropdown-toggle" data-toggle="dropdown"> Pedidos <span class="caret"></span></a>
+                                    <ul role="menu" class="dropdown-menu">
+                                        <li><?php echo $this->Html->link('Consultar', ['controller' => 'Pedidos', 'action' => 'index'], ['icon' => false]); ?></li>
+                                        <li><?php echo $this->Html->link('Cadastrar', ['controller' => 'Pedidos', 'action' => 'add'], ['icon' => false]); ?></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown">
                                     <a aria-expanded="false" role="button" href="" class="dropdown-toggle" data-toggle="dropdown"> Faturas <span class="caret"></span></a>
                                     <ul role="menu" class="dropdown-menu">
                                         <li><?php echo $this->Html->link('Consultar', ['controller' => 'Faturas', 'action' => 'index'], ['icon' => false]); ?></li>

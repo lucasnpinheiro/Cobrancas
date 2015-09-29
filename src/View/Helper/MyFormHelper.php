@@ -82,6 +82,21 @@ class MyFormHelper extends BootstrapFormHelper {
         return $this->input($fieldName, $options);
     }
 
+    public function periodoEmissao($fieldName, array $options = array()) {
+        //1 - Mensal | 2 - Trimestral | 3 - Semestral | 1 - Anual
+        $options += [
+            'type' => 'select',
+            'options' => [
+                1 => __('Mensal'),
+                2 => __('Trimestral'),
+                3 => __('Semestral'),
+                4 => __('Anual'),
+            ],
+            'empty' => __('Selecionar um periodo')
+        ];
+        return $this->input($fieldName, $options);
+    }
+
     public function button($title, array $options = array()) {
         if (!isset($options['icon'])) {
             $title = $this->Html->icon('save') . ' ' . $title;
@@ -217,6 +232,7 @@ class MyFormHelper extends BootstrapFormHelper {
 
     public function data($fieldName, array $options = array()) {
         $default = [
+            'value' => '',
             'class' => 'data',
             'div' => [
                 'class' => 'date'
@@ -226,19 +242,21 @@ class MyFormHelper extends BootstrapFormHelper {
             'append' => '<i class="fa fa-calendar fa-lg"></i>',
         ];
         if (!empty($this->request->data($fieldName))) {
-            $default['value'] = $this->Html->data($this->request->data($fieldName));
+            $default['value'] = $this->request->data($fieldName);
         }
+        
         $options = \Cake\Utility\Hash::merge($default, $options);
+        if(trim($options['value']) != ''){
+             $options['value'] = $this->Html->data($options['value']);
+        }
         $options['class'] .= ' ' . $default['class'];
         $options['div']['class'] .= ' ' . $default['div']['class'];
 
-        //return '<div class="input-group date">' . $this->input($fieldName, $options) . '<span class="input-group-addon"><i class="fa fa-calendar fa-lg"></i></span></div>';
         return $this->input($fieldName, $options);
     }
 
     public function numero($fieldName, array $options = array()) {
         $default = [
-            'label' => 'Número',
             'type' => 'text',
             'class' => 'numero',
             'append' => '0-9'
@@ -283,6 +301,30 @@ class MyFormHelper extends BootstrapFormHelper {
             'type' => 'text',
             'class' => 'moeda',
             'append' => '<i class="fa fa-money"></i>',
+            'value' => ($this->request->data($fieldName) ? $this->Number->format($this->request->data($fieldName), $currency) : null)
+        ];
+
+
+
+        $options = \Cake\Utility\Hash::merge($default, $options);
+        return $this->input($fieldName, $options);
+    }
+
+    public function juros($fieldName, array $options = array()) {
+
+        $currency = [
+            'before' => '',
+            'zero' => '0,00',
+            'places' => '2',
+            'precision' => '2',
+            'locale' => 'pt_BR',
+        ];
+
+
+        $default = [
+            'type' => 'text',
+            'class' => 'juros',
+            'append' => '%',
             'value' => ($this->request->data($fieldName) ? $this->Number->format($this->request->data($fieldName), $currency) : null)
         ];
 

@@ -12,7 +12,7 @@ use App\Controller\AppController;
 class UsuariosController extends AppController {
 
     public function login() {
-        $this->layout = 'login';
+        $this->viewBuilder()->layout('login');
         if ($this->request->is('post')) {
             $user = $this->Auth->identify();
             if ($user) {
@@ -35,7 +35,7 @@ class UsuariosController extends AppController {
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
     public function edit($id = null) {
-        $this->layout = 'administrador';
+        $this->viewBuilder()->layout('administrador');
         $usuario = $this->Usuarios->get($id, [
             'contain' => []
         ]);
