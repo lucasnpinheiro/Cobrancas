@@ -1,6 +1,6 @@
 {
-    "name": "cakephp/app",
-    "description": "CakePHP skeleton app",
+    "name": "lucasnpinheiro/Cobrancas",
+    "description": "Sistema de gerenciamento de faturas de hospedagem e serviços auxiliares.",
     "homepage": "http://cakephp.org",
     "type": "project",
     "license": "MIT",
