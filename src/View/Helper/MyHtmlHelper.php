@@ -159,6 +159,18 @@ class MyHtmlHelper extends BootstrapHtmlHelper {
         $currency = \Cake\Utility\Hash::merge($currency, $options);
         return $this->Number->format($value, $currency);
     }
+    public function porcentagem($value, $options = []) {
+        $currency = [
+            'before' => '',
+            'after' => '%',
+            'zero' => '00',
+            'places' => '2',
+            'precision' => '3',
+            'locale' => 'pt_BR',
+        ];
+        $currency = \Cake\Utility\Hash::merge($currency, $options);
+        return $this->Number->format($value, $currency);
+    }
 
     public function dataHora($data) {
         return date('d/m/Y H:i:s', strtotime($data));

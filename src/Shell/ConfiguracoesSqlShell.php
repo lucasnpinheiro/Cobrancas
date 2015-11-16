@@ -100,6 +100,15 @@ class ConfiguracoesSqlShell extends Shell {
             foreach ($find as $key => $value) {
                 $c = $v = '';
                 foreach ($value as $ke => $va) {
+                    if (in_array($ke, ['created', 'updated', 'modified'])) {
+                        if ($va == '0000-00-00 00:00:00' OR trim($va) == '') {
+                            $va = date('Y-m-d H:i:s');
+                        } else if ($va == '0000-00-00' OR trim($va) == '') {
+                            $va = date('Y-m-d');
+                        } else if ($va == '00:00:00' OR trim($va) == '') {
+                            $va = date('H:i:s');
+                        }
+                    }
                     if ($c != '') {
                         $c .= ', ';
                         $v .= ', ';

@@ -58,7 +58,7 @@ class UsuariosTable extends Table {
                 ->notEmpty('usuario');
 
         $validator
-                ->allowEmpty('senha', 'create');
+                ->requirePresence('senha', 'create')->notEmpty('senha', 'Senha Obrigatoria', 'create');
 
         $validator
                 ->add('status', 'valid', ['rule' => 'numeric'])

@@ -22,10 +22,10 @@
                         <td><?= $this->Number->format($pedido->id) ?></td>
                         <td><?= $pedido->has('usuario') ? $this->Html->link($pedido->usuario->usuario, ['controller' => 'Usuarios', 'action' => 'view', $pedido->usuario->id]) : '' ?></td>
                         <td><?= $pedido->has('usuarios_dominio') ? $this->Html->link($pedido->usuarios_dominio->dominio, ['controller' => 'UsuariosDominios', 'action' => 'view', $pedido->usuarios_dominio->id]) : '' ?></td>
-                        <td><?= $this->Number->format($pedido->valor) ?></td>
-                        <td><?= $this->Number->format($pedido->juros) ?></td>
-                        <td><?= $this->Number->format($pedido->desconto) ?></td>
-                        <td><?= $this->Number->format($pedido->total) ?></td>
+                        <td><?= $this->Html->moeda($pedido->valor) ?></td>
+                        <td><?= $this->Html->porcentagem($pedido->juros) ?></td>
+                        <td><?= $this->Html->moeda($pedido->desconto) ?></td>
+                        <td><?= $this->Html->moeda($pedido->total) ?></td>
                         <td class="actions">
                             <?= $this->Html->link(__('View'), ['action' => 'view', $pedido->id]) ?>
                             <?= $this->Html->link(__('Edit'), ['action' => 'edit', $pedido->id]) ?>

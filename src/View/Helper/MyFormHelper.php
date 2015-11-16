@@ -287,7 +287,6 @@ class MyFormHelper extends BootstrapFormHelper {
     }
 
     public function moeda($fieldName, array $options = array()) {
-
         $currency = [
             'before' => '',
             'zero' => '0,00',
@@ -295,23 +294,19 @@ class MyFormHelper extends BootstrapFormHelper {
             'precision' => '2',
             'locale' => 'pt_BR',
         ];
-
-
+        
+        $val = $this->context();
         $default = [
             'type' => 'text',
             'class' => 'moeda',
             'append' => '<i class="fa fa-money"></i>',
-            'value' => ($this->request->data($fieldName) ? $this->Number->format($this->request->data($fieldName), $currency) : null)
+            'value' => ($val->val($fieldName) ? $this->Number->format($val->val($fieldName), $currency) : null)
         ];
-
-
-
         $options = \Cake\Utility\Hash::merge($default, $options);
         return $this->input($fieldName, $options);
     }
 
     public function juros($fieldName, array $options = array()) {
-
         $currency = [
             'before' => '',
             'zero' => '0,00',
@@ -319,16 +314,13 @@ class MyFormHelper extends BootstrapFormHelper {
             'precision' => '2',
             'locale' => 'pt_BR',
         ];
-
-
+        $val = $this->context();
         $default = [
             'type' => 'text',
             'class' => 'juros',
             'append' => '%',
-            'value' => ($this->request->data($fieldName) ? $this->Number->format($this->request->data($fieldName), $currency) : null)
+            'value' => ($val->val($fieldName) ? $this->Number->format($val->val($fieldName), $currency) : null)
         ];
-
-
 
         $options = \Cake\Utility\Hash::merge($default, $options);
         return $this->input($fieldName, $options);
@@ -368,24 +360,13 @@ class MyFormHelper extends BootstrapFormHelper {
     }
 
     public function select2($fieldName, array $options = array(), array $config = array()) {
-        $_context = $this->context();
-        $value = $_context->val($fieldName);
-
-        if (trim($value) != '') {
-            $preselected = array();
-            $val = array();
-            foreach (json_decode($value, true) as $k => $v) {
-                $preselected[] = ["id" => $k, "text" => $v];
-                $val[] = $v;
-            }
-            $config['data'] = $preselected;
-            $config['val'] = $val;
-            $options['value'] = $val;
-        }
-
         $config += ['language' => "pt-BR"];
         $options += ['id' => $this->_domId($fieldName)];
         $options += ['type' => 'select'];
+        if (isset($config['dados'])) {
+            $options += $this->complementoSelect2($config['dados']);
+            unset($config['dados']);
+        }
 
         if (isset($config['tokenSeparators'])) {
             $options['help'] = 'Tipo(s) de separador(es) "' . implode('" ', $config['tokenSeparators']) . '"';
@@ -399,13 +380,6 @@ class MyFormHelper extends BootstrapFormHelper {
                 $('#" . $options['id'] . "').select2(" . json_encode($config) . ");
             });
         ", ['block' => 'script']);
-        if (isset($config['multiple']) and $config['multiple'] == true) {
-            $this->Html->scriptBlock("
-            jQuery('document').ready(function(){
-                $('#" . $options['id'] . "').select2().val(" . json_encode($options['value']) . ").trigger('change');
-            });
-        ", ['block' => 'script']);
-        }
         return $this->input($fieldName, $options);
     }
 
@@ -422,6 +396,17 @@ class MyFormHelper extends BootstrapFormHelper {
         $this->Html->css('/css/upload.css', ['block' => 'css']);
         $this->Html->scriptBlock("document.getElementById('" . $id . "').addEventListener('change', handleFileSelect, false);", ['block' => 'script']);
         return $this->input($fieldName, $options) . '<output id="listFileUpload">' . $image . '</output>';
+    }
+
+    public function complementoSelect2($dados) {
+        $retorno = array();
+        if (trim($dados) != '') {
+            foreach (json_decode($dados, true) as $value) {
+                $retorno['options'][$value] = $value;
+                $retorno['default'][] = $value;
+            }
+        }
+        return $retorno;
     }
 
 }

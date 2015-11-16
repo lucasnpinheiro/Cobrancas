@@ -74,6 +74,8 @@ class PedidosController extends AdministradorAppController {
             'contain' => ['Produtos']
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
+            $this->request->data['valor'] = str_replace(',', '.', str_replace('.', '', $this->request->data['valor']));
+            $this->request->data['juros'] = str_replace(',', '.', str_replace('.', '', $this->request->data['juros']));
             $pedido = $this->Pedidos->patchEntity($pedido, $this->request->data);
             if ($this->Pedidos->save($pedido)) {
                 $this->Flash->success(__('The pedido has been saved.'));

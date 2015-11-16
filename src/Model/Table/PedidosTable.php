@@ -105,22 +105,31 @@ class PedidosTable extends Table {
     }
 
     public function save(\Cake\Datasource\EntityInterface $entity, $options = array()) {
+        $prod_pedidos = \Cake\ORM\TableRegistry::get('pedidos_produtos');
+        if (isset($entity->id) and ! is_null($entity->id)) {
+            $prod_pedidos->query('DELETE FROM pedidos_produtos WHERE pedido_id="' . $entity->id . '"');
+        }
+        $entity->juros = is_null($entity->juros) ? 0 : $entity->juros;
+        $entity->desconto = is_null($entity->desconto) ? 0 : $entity->desconto;
         $return = parent::save($entity, $options);
         $id = $return->id;
-        $list = $this->Produtos->find('all')->toArray();
-        if(count($list) > 0){
-            foreach ($list as $key => $value) {
+        $total = 0;
+        if (count($entity->produtos) > 0) {
+            foreach ($entity->produtos as $value) {
                 $prod_pedidos = \Cake\ORM\TableRegistry::get('pedidos_produtos');
-                $pFind = $prod_pedidos->find()->where(['pedido_id'=>$id, 'produto_id'=>$value->id])->first();
-                debug($pFind);
-                if(count($pFind)){
-                    $pFind->valor = $value->valor;
-                    $pFind->desconto = 0;
-                    $pFind->juros = 0;
-                }
+                $pFind = $prod_pedidos->find()->where(['pedido_id' => $id, 'produto_id' => $value->id])->first();
+
+                $pFind->valor = $value->valor;
+                $pFind->desconto = 0;
+                $pFind->juros = 0;
+                $pFind->status = 1;
+                $total += $value->valor;
                 $prod_pedidos->save($pFind);
             }
         }
+        $entity->valor = $total;
+        $entity->total = ((($total * $entity->juros) + $total) - $entity->desconto);
+
         return parent::save($entity, $options);
     }
 
