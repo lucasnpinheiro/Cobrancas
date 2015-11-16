@@ -16,7 +16,6 @@ namespace Cake\Collection;
 
 use AppendIterator;
 use ArrayIterator;
-use Cake\Collection\Collection;
 use Cake\Collection\Iterator\BufferedIterator;
 use Cake\Collection\Iterator\ExtractIterator;
 use Cake\Collection\Iterator\FilterIterator;
@@ -30,9 +29,9 @@ use Cake\Collection\Iterator\TreeIterator;
 use Cake\Collection\Iterator\UnfoldIterator;
 use Cake\Collection\Iterator\ZipIterator;
 use Countable;
-use Iterator;
 use LimitIterator;
 use RecursiveIteratorIterator;
+use Traversable;
 
 /**
  * Offers a handful of method to manipulate iterators
@@ -166,7 +165,7 @@ trait CollectionTrait
         if (is_string($matcher) && strpos($matcher, '{*}') !== false) {
             $extractor = $extractor
                 ->filter(function ($data) {
-                    return $data !== null && ($data instanceof \Traversable || is_array($data));
+                    return $data !== null && ($data instanceof Traversable || is_array($data));
                 })
                 ->unfold();
         }
@@ -383,7 +382,7 @@ trait CollectionTrait
 
             if (!($options['groupPath'])) {
                 $mapReduce->emit($rowVal($value, $key), $rowKey($value, $key));
-                return;
+                return null;
             }
 
             $key = $options['groupPath']($value, $key);
@@ -434,7 +433,7 @@ trait CollectionTrait
                     $parents[$id] = $isObject ? $parents[$id] : new ArrayIterator($parents[$id], 1);
                     $mapReduce->emit($parents[$id]);
                 }
-                return;
+                return null;
             }
 
             $children = [];

@@ -14,8 +14,8 @@
  */
 namespace Cake\Database\Expression;
 
+use BadMethodCallException;
 use Cake\Database\ExpressionInterface;
-use Cake\Database\Expression\IdentifierExpression;
 use Cake\Database\Query;
 use Cake\Database\TypeMapTrait;
 use Cake\Database\ValueBinder;
@@ -487,7 +487,7 @@ class QueryExpression implements ExpressionInterface, Countable
         if (in_array($method, ['and', 'or'])) {
             return call_user_func_array([$this, $method . '_'], $args);
         }
-        throw new \BadMethodCallException(sprintf('Method %s does not exist', $method));
+        throw new BadMethodCallException(sprintf('Method %s does not exist', $method));
     }
 
     /**
@@ -508,10 +508,7 @@ class QueryExpression implements ExpressionInterface, Countable
         if (is_object($c) && is_callable($c)) {
             return true;
         }
-        if (is_array($c) && isset($c[0]) && is_object($c[0]) && is_callable($c)) {
-            return true;
-        }
-        return false;
+        return is_array($c) && isset($c[0]) && is_object($c[0]) && is_callable($c);
     }
 
     /**
@@ -654,5 +651,19 @@ class QueryExpression implements ExpressionInterface, Countable
             $params[] = $this->_bindValue($field, $value, $type);
         }
         return implode(', ', $params);
+    }
+
+    /**
+     * Clone this object and its subtree of expressions.
+     *
+     * @return void
+     */
+    public function __clone()
+    {
+        foreach ($this->_conditions as $i => $condition) {
+            if ($condition instanceof ExpressionInterface) {
+                $this->_conditions[$i] = clone $condition;
+            }
+        }
     }
 }

@@ -14,6 +14,11 @@
  */
 namespace Cake\Filesystem;
 
+use DirectoryIterator;
+use Exception;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+
 /**
  * Folder structure browser, lists folders and files.
  * Provides an Object interface for Common directory related tasks.
@@ -173,8 +178,8 @@ class Folder
         $skipHidden = isset($exceptions['.']) || $exceptions === true;
 
         try {
-            $iterator = new \DirectoryIterator($this->path);
-        } catch (\Exception $e) {
+            $iterator = new DirectoryIterator($this->path);
+        } catch (Exception $e) {
             return [$dirs, $files];
         }
 
@@ -182,12 +187,12 @@ class Folder
             if ($item->isDot()) {
                 continue;
             }
-            $name = $item->getFileName();
+            $name = $item->getFilename();
             if ($skipHidden && $name[0] === '.' || isset($exceptions[$name])) {
                 continue;
             }
             if ($fullPath) {
-                $name = $item->getPathName();
+                $name = $item->getPathname();
             }
             if ($item->isDir()) {
                 $dirs[] = $name;
@@ -296,12 +301,8 @@ class Folder
      */
     public static function isRegisteredStreamWrapper($path)
     {
-        if (preg_match('/^[A-Z]+(?=:\/\/)/i', $path, $matches) &&
-            in_array($matches[0], stream_get_wrappers())
-        ) {
-            return true;
-        }
-        return false;
+        return preg_match('/^[A-Z]+(?=:\/\/)/i', $path, $matches) &&
+            in_array($matches[0], stream_get_wrappers());
     }
 
     /**
@@ -473,9 +474,9 @@ class Folder
         }
 
         try {
-            $directory = new \RecursiveDirectoryIterator($path, \RecursiveDirectoryIterator::KEY_AS_PATHNAME | \RecursiveDirectoryIterator::CURRENT_AS_SELF);
-            $iterator = new \RecursiveIteratorIterator($directory, \RecursiveIteratorIterator::SELF_FIRST);
-        } catch (\Exception $e) {
+            $directory = new RecursiveDirectoryIterator($path, RecursiveDirectoryIterator::KEY_AS_PATHNAME | RecursiveDirectoryIterator::CURRENT_AS_SELF);
+            $iterator = new RecursiveIteratorIterator($directory, RecursiveIteratorIterator::SELF_FIRST);
+        } catch (Exception $e) {
             if ($type === null) {
                 return [[], []];
             }
@@ -610,9 +611,9 @@ class Folder
         $path = Folder::slashTerm($path);
         if (is_dir($path)) {
             try {
-                $directory = new \RecursiveDirectoryIterator($path, \RecursiveDirectoryIterator::CURRENT_AS_SELF);
-                $iterator = new \RecursiveIteratorIterator($directory, \RecursiveIteratorIterator::CHILD_FIRST);
-            } catch (\Exception $e) {
+                $directory = new RecursiveDirectoryIterator($path, RecursiveDirectoryIterator::CURRENT_AS_SELF);
+                $iterator = new RecursiveIteratorIterator($directory, RecursiveIteratorIterator::CHILD_FIRST);
+            } catch (Exception $e) {
                 return false;
             }
 
@@ -753,10 +754,7 @@ class Folder
             return false;
         }
 
-        if (!empty($this->_errors)) {
-            return false;
-        }
-        return true;
+        return empty($this->_errors);
     }
 
     /**

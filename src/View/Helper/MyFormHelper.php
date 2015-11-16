@@ -244,10 +244,10 @@ class MyFormHelper extends BootstrapFormHelper {
         if (!empty($this->request->data($fieldName))) {
             $default['value'] = $this->request->data($fieldName);
         }
-        
+
         $options = \Cake\Utility\Hash::merge($default, $options);
-        if(trim($options['value']) != ''){
-             $options['value'] = $this->Html->data($options['value']);
+        if (trim($options['value']) != '') {
+            $options['value'] = $this->Html->data($options['value']);
         }
         $options['class'] .= ' ' . $default['class'];
         $options['div']['class'] .= ' ' . $default['div']['class'];
@@ -368,6 +368,21 @@ class MyFormHelper extends BootstrapFormHelper {
     }
 
     public function select2($fieldName, array $options = array(), array $config = array()) {
+        $_context = $this->context();
+        $value = $_context->val($fieldName);
+
+        if (trim($value) != '') {
+            $preselected = array();
+            $val = array();
+            foreach (json_decode($value, true) as $k => $v) {
+                $preselected[] = ["id" => $k, "text" => $v];
+                $val[] = $v;
+            }
+            $config['data'] = $preselected;
+            $config['val'] = $val;
+            $options['value'] = $val;
+        }
+
         $config += ['language' => "pt-BR"];
         $options += ['id' => $this->_domId($fieldName)];
         $options += ['type' => 'select'];
@@ -384,6 +399,13 @@ class MyFormHelper extends BootstrapFormHelper {
                 $('#" . $options['id'] . "').select2(" . json_encode($config) . ");
             });
         ", ['block' => 'script']);
+        if (isset($config['multiple']) and $config['multiple'] == true) {
+            $this->Html->scriptBlock("
+            jQuery('document').ready(function(){
+                $('#" . $options['id'] . "').select2().val(" . json_encode($options['value']) . ").trigger('change');
+            });
+        ", ['block' => 'script']);
+        }
         return $this->input($fieldName, $options);
     }
 

@@ -19,6 +19,7 @@ namespace Cake\Shell;
 use Cake\Console\Shell;
 use Cake\Core\Plugin;
 use Cake\Utility\Inflector;
+use DirectoryIterator;
 
 /**
  * Shell for I18N management.
@@ -44,7 +45,7 @@ class I18nShell extends Shell
         $this->out('<info>I18n Shell</info>');
         $this->hr();
         $this->out('[E]xtract POT file from sources');
-        $this->out('[I]inialize a language from POT file');
+        $this->out('[I]nitialize a language from POT file');
         $this->out('[H]elp');
         $this->out('[Q]uit');
 
@@ -73,7 +74,7 @@ class I18nShell extends Shell
      * Inits PO file from POT file.
      *
      * @param string|null $language Language code to use.
-     * @return void|int
+     * @return int|null
      */
     public function init($language = null)
     {
@@ -98,7 +99,7 @@ class I18nShell extends Shell
         }
 
         $count = 0;
-        $iterator = new \DirectoryIterator($sourceFolder);
+        $iterator = new DirectoryIterator($sourceFolder);
         foreach ($iterator as $fileinfo) {
             if (!$fileinfo->isFile()) {
                 continue;

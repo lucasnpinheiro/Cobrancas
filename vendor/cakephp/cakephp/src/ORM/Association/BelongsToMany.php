@@ -18,10 +18,11 @@ use Cake\Datasource\EntityInterface;
 use Cake\ORM\Association;
 use Cake\ORM\Query;
 use Cake\ORM\Table;
-use Cake\ORM\TableRegistry;
 use Cake\Utility\Inflector;
 use InvalidArgumentException;
 use RuntimeException;
+use SplObjectStorage;
+use Traversable;
 
 /**
  * Represents an M - N relationship where there exists a junction - or join - table
@@ -164,6 +165,7 @@ class BelongsToMany extends Association
         $source = $this->source();
         $sAlias = $source->alias();
         $tAlias = $target->alias();
+        $tableLocator = $this->tableLocator();
 
         if ($table === null) {
             if (!empty($this->_junctionTable)) {
@@ -177,15 +179,15 @@ class BelongsToMany extends Association
                 $tableAlias = Inflector::camelize($tableName);
 
                 $config = [];
-                if (!TableRegistry::exists($tableAlias)) {
+                if (!$tableLocator->exists($tableAlias)) {
                     $config = ['table' => $tableName];
                 }
-                $table = TableRegistry::get($tableAlias, $config);
+                $table = $tableLocator->get($tableAlias, $config);
             }
         }
 
         if (is_string($table)) {
-            $table = TableRegistry::get($table);
+            $table = $tableLocator->get($table);
         }
         $junctionAlias = $table->alias();
 
@@ -254,11 +256,27 @@ class BelongsToMany extends Association
         }
 
         unset($options['queryBuilder']);
+        $type = array_intersect_key($options, ['joinType' => 1, 'fields' => 1]);
         $options = ['conditions' => [$cond]] + compact('includeFields');
         $options['foreignKey'] = $this->targetForeignKey();
         $assoc = $this->_targetTable->association($junction->alias());
-        $assoc->attachTo($query, $options);
+        $assoc->attachTo($query, $options + $type);
         $query->eagerLoader()->addToJoinsMap($junction->alias(), $assoc, true);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function _appendNotMatching($query, $options)
+    {
+        $target = $this->junction();
+        if (!empty($options['negateMatch'])) {
+            $primaryKey = $query->aliasFields((array)$target->primaryKey(), $target->alias());
+            $query->andWhere(function ($exp) use ($primaryKey) {
+                array_map([$exp, 'isNull'], $primaryKey);
+                return $exp;
+            });
+        }
     }
 
     /**
@@ -471,7 +489,7 @@ class BelongsToMany extends Association
         }
         unset($options['associated'][$this->_junctionProperty]);
 
-        if (!(is_array($entities) || $entities instanceof \Traversable)) {
+        if (!(is_array($entities) || $entities instanceof Traversable)) {
             $name = $this->property();
             $message = sprintf('Could not save %s, it cannot be traversed', $name);
             throw new InvalidArgumentException($message);
@@ -527,7 +545,6 @@ class BelongsToMany extends Association
     {
         $target = $this->target();
         $junction = $this->junction();
-        $source = $this->source();
         $entityClass = $junction->entityClass();
         $belongsTo = $junction->association($target->alias());
         $foreignKey = (array)$this->foreignKey();
@@ -658,7 +675,7 @@ class BelongsToMany extends Association
             return;
         }
 
-        $storage = new \SplObjectStorage;
+        $storage = new SplObjectStorage;
         foreach ($targetEntities as $e) {
             $storage->attach($e);
         }
@@ -741,6 +758,7 @@ class BelongsToMany extends Association
 
                 $associationConditions = $this->conditions();
                 if ($associationConditions) {
+                    $existing->contain($this->target()->alias());
                     $existing->andWhere($associationConditions);
                 }
 
@@ -777,7 +795,7 @@ class BelongsToMany extends Association
      * @param \Cake\ORM\Query $existing a query for getting existing links
      * @param array $jointEntities link entities that should be persisted
      * @param array $targetEntities entities in target table that are related to
-     * the `$jointEntitites`
+     * the `$jointEntities`
      * @return array
      */
     protected function _diffLinks($existing, $jointEntities, $targetEntities)
@@ -839,7 +857,7 @@ class BelongsToMany extends Association
     /**
      * Throws an exception should any of the passed entities is not persisted.
      *
-     * @param \Cake\ORM\Entity $sourceEntity the row belonging to the `source` side
+     * @param \Cake\Datasource\EntityInterface $sourceEntity the row belonging to the `source` side
      *   of this association
      * @param array $targetEntities list of entities belonging to the `target` side
      *   of this association

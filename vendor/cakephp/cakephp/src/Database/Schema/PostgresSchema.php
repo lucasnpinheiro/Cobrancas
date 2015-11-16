@@ -15,7 +15,6 @@
 namespace Cake\Database\Schema;
 
 use Cake\Database\Exception;
-use Cake\Database\Schema\Table;
 
 /**
  * Schema management/reflection features for Postgres.
@@ -84,6 +83,9 @@ class PostgresSchema extends BaseSchema
         }
         if (strpos($col, 'timestamp') !== false) {
             return ['type' => 'timestamp', 'length' => null];
+        }
+        if (strpos($col, 'time') !== false) {
+            return ['type' => 'time', 'length' => null];
         }
         if ($col === 'serial' || $col === 'integer') {
             return ['type' => 'integer', 'length' => 10];
@@ -413,6 +415,45 @@ class PostgresSchema extends BaseSchema
             $out .= ' DEFAULT ' . $this->_driver->schemaValue($defaultValue);
         }
         return $out;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function addConstraintSql(Table $table)
+    {
+        $sqlPattern = 'ALTER TABLE %s ADD %s;';
+        $sql = [];
+
+        foreach ($table->constraints() as $name) {
+            $constraint = $table->constraint($name);
+            if ($constraint['type'] === Table::CONSTRAINT_FOREIGN) {
+                $tableName = $this->_driver->quoteIdentifier($table->name());
+                $sql[] = sprintf($sqlPattern, $tableName, $this->constraintSql($table, $name));
+            }
+        }
+
+        return $sql;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function dropConstraintSql(Table $table)
+    {
+        $sqlPattern = 'ALTER TABLE %s DROP CONSTRAINT %s;';
+        $sql = [];
+
+        foreach ($table->constraints() as $name) {
+            $constraint = $table->constraint($name);
+            if ($constraint['type'] === Table::CONSTRAINT_FOREIGN) {
+                $tableName = $this->_driver->quoteIdentifier($table->name());
+                $constraintName = $this->_driver->quoteIdentifier($name);
+                $sql[] = sprintf($sqlPattern, $tableName, $constraintName);
+            }
+        }
+
+        return $sql;
     }
 
     /**

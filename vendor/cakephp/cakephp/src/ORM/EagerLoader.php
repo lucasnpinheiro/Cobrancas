@@ -16,10 +16,6 @@ namespace Cake\ORM;
 
 use Cake\Database\Statement\BufferedStatement;
 use Cake\Database\Statement\CallbackStatement;
-use Cake\ORM\Association;
-use Cake\ORM\EagerLoadable;
-use Cake\ORM\Query;
-use Cake\ORM\Table;
 use Closure;
 use InvalidArgumentException;
 
@@ -64,7 +60,8 @@ class EagerLoader
         'queryBuilder' => 1,
         'finder' => 1,
         'joinType' => 1,
-        'strategy' => 1
+        'strategy' => 1,
+        'negateMatch' => 1
     ];
 
     /**
@@ -145,6 +142,21 @@ class EagerLoader
     }
 
     /**
+     * Remove any existing non-matching based containments.
+     *
+     * This will reset/clear out any contained associations that were not
+     * added via matching().
+     *
+     * @return void
+     */
+    public function clearContain()
+    {
+        $this->_containments = [];
+        $this->_normalized = $this->_loadExternal = null;
+        $this->_aliasList = [];
+    }
+
+    /**
      * Set whether or not contained associations will load fields automatically.
      *
      * @param bool $value The value to set.
@@ -171,9 +183,11 @@ class EagerLoader
      * @param string|null $assoc A single association or a dot separated path of associations.
      * @param callable|null $builder the callback function to be used for setting extra
      * options to the filtering query
+     * @param array $options Extra options for the association matching, such as 'joinType'
+     * and 'fields'
      * @return array The resulting containments array
      */
-    public function matching($assoc = null, callable $builder = null)
+    public function matching($assoc = null, callable $builder = null, $options = [])
     {
         if ($this->_matching === null) {
             $this->_matching = new self();
@@ -187,13 +201,16 @@ class EagerLoader
         $last = array_pop($assocs);
         $containments = [];
         $pointer =& $containments;
+        $options += ['joinType' => 'INNER'];
+        $opts = ['matching' => true] + $options;
+        unset($opts['negateMatch']);
 
         foreach ($assocs as $name) {
-            $pointer[$name] = ['matching' => true];
+            $pointer[$name] = $opts;
             $pointer =& $pointer[$name];
         }
 
-        $pointer[$last] = ['queryBuilder' => $builder, 'matching' => true];
+        $pointer[$last] = ['queryBuilder' => $builder, 'matching' => true] + $options;
         return $this->_matching->contain($containments);
     }
 
